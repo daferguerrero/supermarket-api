@@ -13,13 +13,14 @@ export class SupermarketService {
 
   // Método para crear un supermercado
   async create(supermarket: SupermarketEntity): Promise<SupermarketEntity> {
-    // Validar que la longitud y latitud sean valores válidos
-    if (supermarket.longitude < -180 || supermarket.longitude > 180 || supermarket.latitude < -90 || supermarket.latitude > 90) {
+    // Validar que el nombre del supermercado tenga más de 10 caracteres
+    if (supermarket.name.length <= 10) {
       throw new BusinessLogicException(
-        'Las coordenadas de longitud y latitud no son válidas',
+        'El nombre del supermercado debe tener más de 10 caracteres',
         BusinessError.PRECONDITION_FAILED,
       );
     }
+
     return await this.supermarketRepository.save(supermarket);
   }
 
@@ -30,7 +31,10 @@ export class SupermarketService {
 
   // Método para obtener un supermercado por su ID
   async findOne(id: string): Promise<SupermarketEntity> {
-    const supermarket: SupermarketEntity = await this.supermarketRepository.findOne({ where: { id }, relations: ['cities'] });
+    const supermarket: SupermarketEntity = await this.supermarketRepository.findOne({
+      where: { id },
+      relations: ['cities'],
+    });
     if (!supermarket) {
       throw new BusinessLogicException(
         'No se encontró el supermercado con la identificación proporcionada',
@@ -42,7 +46,9 @@ export class SupermarketService {
 
   // Método para actualizar un supermercado por su ID
   async update(id: string, supermarket: SupermarketEntity): Promise<SupermarketEntity> {
-    const persistedSupermarket: SupermarketEntity = await this.supermarketRepository.findOne({ where: { id } });
+    const persistedSupermarket: SupermarketEntity = await this.supermarketRepository.findOne({
+      where: { id },
+    });
     if (!persistedSupermarket) {
       throw new BusinessLogicException(
         'No se encontró el supermercado con la identificación proporcionada',
@@ -50,10 +56,10 @@ export class SupermarketService {
       );
     }
 
-    // Validar que la longitud y latitud sean valores válidos
-    if (supermarket.longitude < -180 || supermarket.longitude > 180 || supermarket.latitude < -90 || supermarket.latitude > 90) {
+    // Validar que el nombre del supermercado tenga más de 10 caracteres
+    if (supermarket.name.length <= 10) {
       throw new BusinessLogicException(
-        'Las coordenadas de longitud y latitud no son válidas',
+        'El nombre del supermercado debe tener más de 10 caracteres',
         BusinessError.PRECONDITION_FAILED,
       );
     }
@@ -61,17 +67,17 @@ export class SupermarketService {
     return await this.supermarketRepository.save({ ...persistedSupermarket, ...supermarket });
   }
 
-  // Método para eliminar un supermercado por su ID
+  // Método para eliminar un supermercado
   async delete(id: string) {
-    const supermarket: SupermarketEntity = await this.supermarketRepository.findOne({ where: { id } });
+    const supermarket: SupermarketEntity = await this.supermarketRepository.findOne({
+      where: { id },
+    });
     if (!supermarket) {
       throw new BusinessLogicException(
         'No se encontró el supermercado con la identificación proporcionada',
         BusinessError.NOT_FOUND,
       );
     }
-
     await this.supermarketRepository.remove(supermarket);
   }
 }
-
