@@ -31,7 +31,7 @@ describe('SupermarketService', () => {
         longitude: faker.location.longitude(),
         latitude: faker.location.latitude(),
         webpage: faker.internet.url(),
-        // cities: [] // Inicialmente sin relación a ciudades
+        cities: [] // Inicialmente sin relación a ciudades
       });
       supermarketsList.push(supermarket);
     }

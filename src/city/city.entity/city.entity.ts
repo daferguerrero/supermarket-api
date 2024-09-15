@@ -9,7 +9,7 @@ export class CityEntity {
  @Column()
  name: string;
 
- @Column()
+ @Column({ nullable: false })  // country no debe permitir nulos
  country: string;
 
  @Column()
